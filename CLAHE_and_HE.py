@@ -7,11 +7,21 @@ N = 4
 P = 0.3
 PRINT_HISTS = False
 spread_for_all = True
+CLAHE_ALGORITHM = False # if true - use CHAHE else HE
 
 def show_image(img):
     cv2.imshow('original image', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+def histogram_equalization(grey_image):
+    hist, edges = np.histogram(grey_image, range(257))
+    edges = edges[:-1]
+    hist = hist / hist.sum()
+    f = np.array([sum(hist[:i + 1]) for i in range(len(hist))]) * 255
+    for x in range(grey_image.shape[0]):
+        for y in range(grey_image.shape[1]):
+            grey_image[x, y] = f[grey_image[x, y]]
 
 
 def get_CDF_by_image(grey_image):
@@ -164,7 +174,10 @@ if __name__ == "__main__":
     orig = image.copy()
     grey_image = image[:, :, 2] # only V
 
-    CLAHE(grey_image)
+    if CLAHE_ALGORITHM:
+        CLAHE(grey_image)
+    else:
+        histogram_equalization(grey_image)
     show_image(cv2.cvtColor(orig, cv2.COLOR_HSV2BGR))
     show_image(cv2.cvtColor(image, cv2.COLOR_HSV2BGR))
 
