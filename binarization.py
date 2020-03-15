@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-PATH = r"image_houses.jpg"
+PATH = r"xo.jpg"
 PRINT_HISTS = False
 
 
